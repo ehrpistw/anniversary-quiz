@@ -209,6 +209,7 @@
       <p class="comment" id="rComment"></p>
       <div class="note" id="rNote"></div>
       <div class="meta"><span id="rTime"></span><span>《星落》週年隨堂考</span></div>
+      <div class="row"><button class="btn" id="retryBtn" type="button">重新挑戰</button></div>
     </div>
     <div class="foot"><img src="https://ep.neptunegamez.com/images/GNB_0_Logo.png" alt="星落">建議截圖保存本頁成績</div>
   </section>
@@ -344,6 +345,11 @@ $("submitBtn").onclick=async ()=>{
   }catch(err){
     alertMsg("交卷時連線失敗，請檢查網路後再按一次「交卷」。答案仍保留在頁面上。","連線失敗");
   }finally{ state.busy=false; $("submitBtn").classList.remove("loading"); }
+};
+
+$("retryBtn").onclick=()=>{
+  state.cur=0; state.ans=Array(state.qs.length).fill(null);
+  render(); show("quiz");
 };
 
 /* --- 成績 --- */
