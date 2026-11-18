@@ -132,6 +132,11 @@
 
   .boot{text-align:center;color:var(--muted);font-size:14px;letter-spacing:.2em}
 
+  /* ---------- 返回首頁 ---------- */
+  .homeBtn{display:none;position:fixed;top:14px;right:14px;z-index:15;padding:8px 14px;font:inherit;font-size:12px;letter-spacing:.15em;color:var(--silver);background:rgba(6,6,10,.55);backdrop-filter:blur(4px);border:1px solid var(--line2);cursor:pointer;border-radius:0;transition:border-color .2s,color .2s}
+  .homeBtn.show{display:block}
+  .homeBtn:hover{border-color:var(--red2);color:#fff}
+
   @media (min-width:700px){
     .hero{height:540px;margin-bottom:-150px}
     .hero .logo{left:-10%}
@@ -143,6 +148,7 @@
 <div class="scene" id="sceneB"></div>
 <div class="veil"></div>
 <canvas id="sparks"></canvas>
+<button class="homeBtn" id="homeBtn" type="button">返回首頁</button>
 
 <div class="wrap">
 
@@ -282,7 +288,13 @@ function setScene(i){
   back.classList.add("on"); front.classList.remove("on");
   sceneFront = sceneFront==="A" ? "B" : "A";
 }
-function show(id){ document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("on",s.id===id)); window.scrollTo(0,0); }
+function show(id){ document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("on",s.id===id)); window.scrollTo(0,0);
+  $("homeBtn").classList.toggle("show", id==="quiz"||id==="result");
+}
+$("homeBtn").onclick=()=>{
+  state.cur=0; state.ans=Array(state.qs.length).fill(null);
+  setScene(0); show("cover");
+};
 
 state.qs = QUESTIONS; state.ans = Array(QUESTIONS.length).fill(null);
 
