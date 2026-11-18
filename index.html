@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="這一年的冒險故事，你還記得多少？《星落》週年隨堂考，10 題挑戰滿分！">
+<meta property="og:title" content="《星落》週年隨堂考">
+<meta property="og:description" content="這一年的冒險故事，你還記得多少？10 題挑戰滿分！">
+<link rel="icon" href="https://ep.neptunegamez.com/images/GNB_0_Logo.png">
+<title>《星落》週年隨堂考</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --img:"https://ep.neptunegamez.com/images/";
+    --bg:#06060a; --panel:rgba(12,12,18,.78); --line:rgba(220,222,235,.18); --line2:rgba(220,222,235,.38);
+    --ink:#f2f1f5; --muted:#a7a6b6; --red:#a3162d; --red2:#d63a52; --glow:rgba(214,58,82,.45); --silver:#cfd2de;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{min-height:100%;background:var(--bg)}
+  body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+
+  /* ---------- 背景：世界觀場景（交叉淡入） ---------- */
+  .scene{position:fixed;inset:-20px;z-index:0;background-size:cover;background-position:center;filter:blur(3px) saturate(1.05);transform:scale(1.04);opacity:0;transition:opacity 1.2s ease}
+  .scene.on{opacity:1}
+  .veil{position:fixed;inset:0;z-index:1;pointer-events:none;
+    background:radial-gradient(ellipse at 50% 0%,rgba(163,22,45,.22),transparent 55%),
+               linear-gradient(180deg,rgba(6,6,10,.35) 0%,rgba(6,6,10,.6) 45%,rgba(6,6,10,.92) 100%)}
+  #sparks{position:fixed;inset:0;z-index:2;pointer-events:none}
+
+  .wrap{position:relative;z-index:3;max-width:560px;margin:0 auto;padding:22px 18px 40px;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+  .screen{display:none}
+  .screen.on{display:block;animation:rise .55s cubic-bezier(.2,.7,.2,1)}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+  /* ---------- 面板（銳角切邊，呼應 Logo） ---------- */
+  .panel{position:relative;background:var(--panel);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    padding:28px 22px 26px;border:1px solid var(--line);
+    clip-path:polygon(16px 0,100% 0,100% calc(100% - 16px),calc(100% - 16px) 100%,0 100%,0 16px);
+    box-shadow:0 30px 80px rgba(0,0,0,.6)}
+  .panel::before{content:"";position:absolute;left:16px;right:0;top:0;height:2px;background:linear-gradient(90deg,var(--red2),rgba(214,58,82,0) 70%)}
+  .panel::after{content:"";position:absolute;right:16px;left:0;bottom:0;height:1px;background:linear-gradient(270deg,var(--line2),transparent 70%)}
+
+  /* ---------- 封面 ---------- */
+  .hero{position:relative;height:min(62vh,520px);margin:-22px -18px -120px;overflow:hidden;pointer-events:none}
+  .hero .chara{position:absolute;left:50%;top:-4%;height:118%;transform:translateX(-36%);opacity:.92;
+    -webkit-mask-image:linear-gradient(180deg,#000 55%,transparent 92%);mask-image:linear-gradient(180deg,#000 55%,transparent 92%);
+    animation:floaty 7s ease-in-out infinite}
+  @keyframes floaty{50%{transform:translateX(-36%) translateY(-8px)}}
+  .hero .logo{position:absolute;left:-6%;top:6%;width:72%;max-width:400px;filter:drop-shadow(0 4px 24px rgba(0,0,0,.7))}
+  .subtitle{position:relative;z-index:2;text-align:center;margin:0 0 18px}
+  .subtitle .en{font-size:11px;letter-spacing:.5em;color:var(--silver);opacity:.8}
+  .subtitle h1{font-family:"Noto Serif TC",serif;font-weight:900;font-size:clamp(34px,9vw,46px);letter-spacing:.12em;margin-top:4px;
+    background:linear-gradient(180deg,#fff 30%,#c9ccd8);-webkit-background-clip:text;background-clip:text;color:transparent;
+    text-shadow:0 0 34px rgba(214,58,82,.35)}
+  .rule{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px 0 0}
+  .rule i{height:1px;width:64px;background:linear-gradient(90deg,transparent,var(--silver))}
+  .rule i:last-child{transform:scaleX(-1)}
+  .rule b{width:9px;height:9px;background:var(--red2);transform:rotate(45deg);box-shadow:0 0 10px var(--glow)}
+
+  .intro{text-align:center;color:var(--muted);font-size:14px;line-height:1.85;margin-bottom:22px}
+  .intro b{color:var(--ink)}
+  .field{margin-bottom:15px}
+  .field label{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--silver);letter-spacing:.18em;margin-bottom:7px}
+  .field label::before{content:"";width:6px;height:6px;background:var(--red2);transform:rotate(45deg)}
+  .field input{width:100%;padding:13px 14px;border:1px solid var(--line2);background:rgba(0,0,0,.45);color:var(--ink);font:inherit;font-size:16px;outline:none;border-radius:0;transition:border .2s,box-shadow .2s}
+  .field input::placeholder{color:#6f6e7d}
+  .field input:focus{border-color:var(--red2);box-shadow:0 0 0 3px rgba(214,58,82,.18)}
+  .field .hint{font-size:12px;color:#7d7c8b;margin-top:6px}
+  .errmsg{color:#ff8a9b;font-size:13px;min-height:19px;margin:-2px 0 10px;text-align:center}
+
+  .btn{position:relative;display:block;width:100%;padding:15px 10px;border:none;font:inherit;font-size:16px;font-weight:700;letter-spacing:.3em;cursor:pointer;color:#fff;
+    background:linear-gradient(180deg,#c42a43,var(--red) 60%,#7c0f22);
+    clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px);
+    box-shadow:0 0 0 1px rgba(255,255,255,.12) inset;transition:filter .15s,transform .1s,opacity .2s}
+  .btn:hover{filter:brightness(1.12)}
+  .btn:active{transform:translateY(1px)}
+  .btn:disabled{opacity:.35;cursor:not-allowed;filter:grayscale(.5)}
+  .btn.ghost{background:transparent;color:var(--silver);box-shadow:0 0 0 1px var(--line2) inset}
+  .btn.loading{color:transparent}
+  .btn.loading::after{content:"";position:absolute;left:50%;top:50%;width:18px;height:18px;margin:-9px 0 0 -9px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .row{display:flex;gap:10px;margin-top:22px}
+  .row .btn{flex:1}
+
+  /* ---------- 作答 ---------- */
+  .qtop{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:12px}
+  .qno{font-family:"Noto Serif TC",serif;font-weight:900;font-size:40px;line-height:.9;color:#fff;letter-spacing:.02em}
+  .qno small{font-size:15px;color:var(--muted);font-weight:500;margin-left:4px}
+  .qtag{font-size:11px;letter-spacing:.32em;color:var(--silver);opacity:.75}
+  .bar{display:flex;gap:4px;margin-bottom:22px}
+  .bar span{flex:1;height:3px;background:rgba(255,255,255,.12);transition:background .3s}
+  .bar span.done{background:var(--silver)}
+  .bar span.cur{background:var(--red2);box-shadow:0 0 8px var(--glow)}
+  .stem{font-size:18px;font-weight:700;line-height:1.72;margin-bottom:20px;min-height:3.4em}
+  .opts{display:grid;gap:10px}
+  .opt{display:flex;align-items:center;gap:13px;width:100%;text-align:left;padding:14px 14px;border:1px solid var(--line);background:rgba(0,0,0,.4);color:var(--ink);font:inherit;font-size:15.5px;line-height:1.5;cursor:pointer;transition:all .18s;border-radius:0}
+  .opt:hover{border-color:var(--line2);background:rgba(255,255,255,.05)}
+  .opt .k{flex:none;width:30px;height:30px;display:grid;place-items:center;font-family:"Noto Serif TC",serif;font-weight:700;color:var(--silver);border:1px solid var(--line2);transform:rotate(45deg)}
+  .opt .k em{font-style:normal;transform:rotate(-45deg)}
+  .opt.sel{border-color:var(--red2);background:linear-gradient(90deg,rgba(163,22,45,.42),rgba(163,22,45,.12));box-shadow:0 0 18px rgba(214,58,82,.22)}
+  .opt.sel .k{background:var(--red2);border-color:var(--red2);color:#fff}
+
+  /* ---------- 成績 ---------- */
+  .result-art{position:relative;height:min(46vh,380px);margin:-22px -18px -110px;overflow:hidden;pointer-events:none}
+  .result-art img{position:absolute;left:50%;top:-6%;height:125%;transform:translateX(-50%);opacity:.85;
+    -webkit-mask-image:linear-gradient(180deg,#000 45%,transparent 90%);mask-image:linear-gradient(180deg,#000 45%,transparent 90%)}
+  .rhead{text-align:center;font-size:11px;letter-spacing:.5em;color:var(--silver);opacity:.85}
+  .rtitle{text-align:center;font-family:"Noto Serif TC",serif;font-size:20px;font-weight:700;letter-spacing:.15em;margin:6px 0 14px}
+  .who{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;padding:12px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .who div{text-align:center}
+  .who small{display:block;font-size:11px;letter-spacing:.3em;color:var(--muted)}
+  .who b{display:block;font-size:17px;margin-top:3px;word-break:break-all}
+  .score{text-align:center;margin:20px 0 4px;font-family:"Noto Serif TC",serif;line-height:1}
+  .score b{font-size:96px;font-weight:900;color:#fff;text-shadow:0 0 30px var(--glow),0 0 2px #fff}
+  .score small{font-size:22px;color:var(--muted);margin-left:6px}
+  .rank{display:flex;align-items:center;justify-content:center;gap:10px;color:var(--red2);font-family:"Noto Serif TC",serif;font-size:18px;font-weight:700;letter-spacing:.2em;margin:8px 0 6px}
+  .rank::before,.rank::after{content:"";width:7px;height:7px;background:var(--red2);transform:rotate(45deg)}
+  .comment{text-align:center;color:var(--muted);font-size:14px;line-height:1.8}
+  .note{margin-top:16px;padding:10px 12px;font-size:13px;line-height:1.6;color:#ffd3da;background:rgba(163,22,45,.18);border-left:2px solid var(--red2);display:none}
+  .meta{margin-top:18px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;font-size:12px;color:var(--muted)}
+  .foot{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:22px;color:rgba(167,166,182,.6);font-size:11.5px;letter-spacing:.1em}
+  .foot img{height:28px;opacity:.75}
+
+  /* ---------- 彈窗 ---------- */
+  .mask{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;z-index:20;padding:22px}
+  .mask.on{display:flex;animation:rise .3s ease}
+  .mask .panel{max-width:380px;width:100%;text-align:center}
+  .mask h3{font-family:"Noto Serif TC",serif;font-size:21px;letter-spacing:.15em;margin-bottom:10px}
+  .mask p{color:var(--muted);font-size:14.5px;line-height:1.7}
+
+  .boot{text-align:center;color:var(--muted);font-size:14px;letter-spacing:.2em}
+
+  @media (min-width:700px){
+    .hero{height:540px;margin-bottom:-150px}
+    .hero .logo{left:-10%}
+  }
+</style>
+</head>
+<body>
+<div class="scene on" id="sceneA"></div>
+<div class="scene" id="sceneB"></div>
+<div class="veil"></div>
+<canvas id="sparks"></canvas>
+
+<div class="wrap">
+
+  <!-- 封面 -->
+  <section class="screen on" id="cover">
+    <div class="hero">
+      <img class="chara" src="https://ep.neptunegamez.com/images/p2-10-m.png?1" alt="">
+      <img class="logo" src="https://ep.neptunegamez.com/images/Title_TW_WT.png" alt="星落 ELPISOUL">
+    </div>
+    <div class="subtitle">
+      <div class="en">ANNIVERSARY QUIZ</div>
+      <h1>週年隨堂考</h1>
+      <div class="rule"><i></i><b></b><i></i></div>
+    </div>
+    <div class="panel">
+      <p class="intro">這一年的冒險故事，你還記得多少？<br>
+        共 <b>10</b> 題・每題 <b>10</b> 分・滿分 <b>100</b> 分<br>
+        每個 UID 僅限作答一次，交卷後立即公布成績</p>
+      <form id="infoForm" novalidate>
+        <div class="field">
+          <label for="nick">暱稱</label>
+          <input id="nick" maxlength="20" autocomplete="off" placeholder="請輸入遊戲暱稱">
+        </div>
+        <div class="field">
+          <label for="uid">UID</label>
+          <input id="uid" maxlength="30" autocomplete="off" inputmode="numeric" placeholder="請輸入遊戲 UID">
+          <div class="hint">UID 可於遊戲內個人資訊頁面查看</div>
+        </div>
+        <div class="errmsg" id="err"></div>
+        <button class="btn" type="submit" id="startBtn">開始作答</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- 作答 -->
+  <section class="screen" id="quiz">
+    <div class="panel">
+      <div class="qtop">
+        <div class="qno" id="qno">01<small>/ 10</small></div>
+        <div class="qtag">QUESTION</div>
+      </div>
+      <div class="bar" id="qbar"></div>
+      <div class="stem" id="qstem"></div>
+      <div class="opts" id="qopts"></div>
+      <div class="row">
+        <button class="btn ghost" id="prevBtn" type="button">上一題</button>
+        <button class="btn" id="nextBtn" type="button" disabled>下一題</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 成績 -->
+  <section class="screen" id="result">
+    <div class="result-art"><img src="https://ep.neptunegamez.com/images/p2-4-m.png?1" alt=""></div>
+    <div class="panel">
+      <div class="rhead">ANNIVERSARY QUIZ</div>
+      <div class="rtitle">隨堂考成績單</div>
+      <div class="who">
+        <div><small>暱稱</small><b id="rNick"></b></div>
+        <div><small>UID</small><b id="rUid"></b></div>
+      </div>
+      <div class="score"><b id="rScore">0</b><small>/ 100</small></div>
+      <div class="rank" id="rRank"></div>
+      <p class="comment" id="rComment"></p>
+      <div class="note" id="rNote"></div>
+      <div class="meta"><span id="rTime"></span><span>《星落》週年隨堂考</span></div>
+    </div>
+    <div class="foot"><img src="https://ep.neptunegamez.com/images/GNB_0_Logo.png" alt="星落">建議截圖保存本頁成績</div>
+  </section>
+
+</div>
+
+<!-- 交卷確認 -->
+<div class="mask" id="confirm">
+  <div class="panel">
+    <h3>確定交卷？</h3>
+    <p>交卷後將無法修改答案。</p>
+    <div class="row">
+      <button class="btn ghost" id="cancelBtn" type="button">再檢查</button>
+      <button class="btn" id="submitBtn" type="button">交卷</button>
+    </div>
+  </div>
+</div>
+<!-- 錯誤訊息 -->
+<div class="mask" id="alertBox">
+  <div class="panel">
+    <h3 id="alertTitle">提示</h3>
+    <p id="alertMsg"></p>
+    <div class="row"><button class="btn" id="alertOk" type="button">確定</button></div>
+  </div>
+</div>
+
+<script>
+const IMG = "https://ep.neptunegamez.com/images/";
+const SCENES = ["p3-p1.png?1","p3-p2.png","p3-p3.png?1","p3-p4.png"].map(f=>IMG+f);
+const KEYS = ["A","B","C","D"];
+const $ = id => document.getElementById(id);
+const state = { nick:"", uid:"", qs:null, cur:0, ans:[], busy:false };
+
+/* ===== 設定：貼上 Google Apps Script 網頁應用程式網址 ===== */
+const API_URL = "https://script.google.com/macros/s/AKfycbw2gdFBEXMiMFetUHkjcpEUOqBdQDB4xPaXDiE7L5_qhMIIkD1J_LwPQeujfvKpADg/exec";
+
+/* 題目（正確答案不在這裡，由 Google Apps Script 計分） */
+const QUESTIONS = [
+  {q:"小魔物「咕咕」闖進伊涅利絲的山谷木屋，把屋子撞塌後，還一口吃掉了什麼才逃走？", o:["屋頂上的魔法石","院子裡的花種","伊涅利絲的弓箭","一整罐解玉砂"]},
+  {q:"阿斯特莉亞混在被黑衣人劫走的商隊裡時，用的是哪個化名？", o:["斯特拉","艾瑟兒","莉亞","阿莉絲"]},
+  {q:"蒙娜翻公會委託本時，發現羅亞簽下的不是自己的名字，而是「守望」。「守望」是什麼？", o:["羅亞大劍的名字","羅亞故鄉的圈落名","羅亞所屬探險隊的名字","公會給羅亞的稱號"]},
+  {q:"護送任務結束時，埃斯特拉把拼好的紋章塞給隊長，要他拿著紋章去羅斯伯爾家族做什麼？", o:["領取護衛酬勞","提親，和她結婚","加入她的探險隊","向長兄報告考驗結果"]},
+  {q:"伊莎貝爾之前吃了別人分給她的肉乾，結果渾身起紅疹、差點暈倒。她對什麼過敏？", o:["辣椒","瑩草","花粉","麵粉"]},
+  {q:"永夜的母親離家前留下一句話：「赫拉，等我找到＿＿＿就回來。」空格裡是什麼？", o:["月之淚","時之砂","黃金沙漏","星紋草"]},
+  {q:"燧影隸屬公會禁衛隊，蒂娜一眼就從她武器上的紋路認出身分。禁衛隊為這種武器取的名字是？", o:["裁決","燧火","斷罪","審判之影"]},
+  {q:"隊長拿到集市的鏽章，鑑寶人說只值 2 枚銀幣。後來瑪德蓮以自由學派的名義出價多少？", o:["20 枚金幣","50 枚金幣","200 枚金幣","2000 枚銀幣"]},
+  {q:"鎺對深淵二層瞭如指掌，卻還是主動找隊長合作完成繼承人試煉的地圖。她坦白的原因是？", o:["她不太會畫地圖","她不能離開雪村太遠","試煉規定必須兩人合作","她想打聽公會的情報"]},
+  {q:"被稱作「正義聖女」的司禮者，是哪一個組織的創建者？", o:["暗夜侍者","聖歌","雪折邸","守望"]}
+];
+
+/* --- 呼叫 Google Apps Script --- */
+async function api(payload){
+  if(!API_URL) throw new Error("尚未設定 API_URL");
+  const res = await fetch(API_URL,{method:"POST",body:JSON.stringify(payload)});
+  if(!res.ok) throw new Error("HTTP "+res.status);
+  return res.json();
+}
+function alertMsg(msg,title){ $("alertTitle").textContent=title||"提示"; $("alertMsg").textContent=msg; $("alertBox").classList.add("on"); }
+$("alertOk").onclick=()=>$("alertBox").classList.remove("on");
+
+/* --- 背景場景切換 --- */
+SCENES.forEach(s=>{ const i=new Image(); i.src=s; });
+let sceneIdx=0, sceneFront="A";
+$("sceneA").style.backgroundImage=`url("${SCENES[0]}")`;
+function setScene(i){
+  i=i%SCENES.length; if(i===sceneIdx) return; sceneIdx=i;
+  const back = sceneFront==="A" ? $("sceneB") : $("sceneA");
+  const front= sceneFront==="A" ? $("sceneA") : $("sceneB");
+  back.style.backgroundImage=`url("${SCENES[i]}")`;
+  back.classList.add("on"); front.classList.remove("on");
+  sceneFront = sceneFront==="A" ? "B" : "A";
+}
+function show(id){ document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("on",s.id===id)); window.scrollTo(0,0); }
+
+state.qs = QUESTIONS; state.ans = Array(QUESTIONS.length).fill(null);
+
+/* --- 封面 --- */
+$("infoForm").addEventListener("submit", async e=>{
+  e.preventDefault();
+  if(state.busy) return;
+  const nick=$("nick").value.trim(), uid=$("uid").value.trim();
+  if(!nick){ $("err").textContent="請輸入暱稱"; $("nick").focus(); return; }
+  if(!uid){ $("err").textContent="請輸入 UID"; $("uid").focus(); return; }
+  if(!/^[0-9A-Za-z_-]{4,30}$/.test(uid)){ $("err").textContent="UID 格式不正確，請再確認"; $("uid").focus(); return; }
+  $("err").textContent="";
+  state.busy=true; $("startBtn").classList.add("loading");
+  try{
+    const chk = await api({action:"check", nickname:nick, uid});
+    if(!chk.ok){ $("err").textContent=chk.msg; return; }
+    state.nick=nick; state.uid=uid;
+    if(chk.already){ showResult(chk.result,true); return; }
+    state.cur=0; render(); show("quiz");
+  }catch(err){
+    $("err").textContent="連線不穩定，請稍後再試一次";
+  }finally{ state.busy=false; $("startBtn").classList.remove("loading"); }
+});
+
+/* --- 作答 --- */
+function render(){
+  const i=state.cur, Q=state.qs[i], n=state.qs.length;
+  $("qno").innerHTML=String(i+1).padStart(2,"0")+"<small>/ "+n+"</small>";
+  $("qbar").innerHTML=state.qs.map((_,k)=>`<span class="${k<i?'done':k===i?'cur':''}"></span>`).join("");
+  $("qstem").textContent=Q.q;
+  const box=$("qopts"); box.innerHTML="";
+  Q.o.forEach((t,k)=>{
+    const b=document.createElement("button");
+    b.type="button"; b.className="opt"+(state.ans[i]===k?" sel":"");
+    b.innerHTML='<span class="k"><em>'+KEYS[k]+'</em></span><span></span>';
+    b.lastChild.textContent=t;
+    b.onclick=()=>{ state.ans[i]=k; render(); };
+    box.appendChild(b);
+  });
+  $("prevBtn").style.visibility=i===0?"hidden":"visible";
+  $("nextBtn").textContent=i===n-1?"交卷":"下一題";
+  $("nextBtn").disabled=state.ans[i]===null;
+  setScene(Math.floor(i/3)+1);
+}
+$("prevBtn").onclick=()=>{ if(state.cur>0){ state.cur--; render(); } };
+$("nextBtn").onclick=()=>{
+  if(state.ans[state.cur]===null) return;
+  if(state.cur<state.qs.length-1){ state.cur++; render(); window.scrollTo(0,0); }
+  else $("confirm").classList.add("on");
+};
+$("cancelBtn").onclick=()=>$("confirm").classList.remove("on");
+$("submitBtn").onclick=async ()=>{
+  if(state.busy) return; state.busy=true;
+  $("submitBtn").classList.add("loading");
+  try{
+    const res = await api({action:"submit", nickname:state.nick, uid:state.uid, answers:state.ans});
+    $("confirm").classList.remove("on");
+    if(!res.ok){ alertMsg(res.msg); return; }
+    showResult(res.result, res.already);
+  }catch(err){
+    alertMsg("交卷時連線失敗，請檢查網路後再按一次「交卷」。答案仍保留在頁面上。","連線失敗");
+  }finally{ state.busy=false; $("submitBtn").classList.remove("loading"); }
+};
+
+/* --- 成績 --- */
+function showResult(r, already){
+  $("rNick").textContent=r.nickname; $("rUid").textContent=r.uid;
+  $("rTime").textContent="交卷時間 "+r.time;
+  const tiers=[[100,"星落全知者","滿分！這一年的每段冒險都牢牢刻在你心裡。"],
+               [80,"資深探險者","相當厲害，大部分的冒險細節都難不倒你。"],
+               [60,"見習探險者","及格了！再回味一次活動劇情吧。"],
+               [0,"迷途的旅人","沒關係，星落的故事還很長，一起重溫那些冒險吧！"]];
+  const t=tiers.find(x=>r.score>=x[0]);
+  $("rRank").textContent=t[1]; $("rComment").textContent=t[2];
+  const note=$("rNote");
+  if(already){ note.style.display="block"; note.textContent="此 UID 已經作答過，以下為首次作答的成績（每個 UID 只採計一次）。"; }
+  else note.style.display="none";
+  setScene(0); show("result"); countUp(r.score);
+}
+function countUp(target){
+  const el=$("rScore"), t0=performance.now(), d=1000;
+  (function step(t){ const p=Math.min(1,(t-t0)/d); el.textContent=Math.round(target*(1-Math.pow(1-p,3))); if(p<1) requestAnimationFrame(step); })(t0);
+}
+
+/* --- 星屑粒子 --- */
+(function(){
+  const c=$("sparks"), x=c.getContext("2d"), dpr=Math.min(2,devicePixelRatio||1); let W,H,P=[];
+  function size(){ W=c.width=innerWidth*dpr; H=c.height=innerHeight*dpr;
+    P=Array.from({length:Math.round(innerWidth*innerHeight/9000)},()=>spawn(true)); }
+  function spawn(init){ return {x:Math.random()*W, y:init?Math.random()*H:H+10, r:(Math.random()*1.4+.4)*dpr, v:(Math.random()*.35+.12)*dpr, a:Math.random()*.6+.2, red:Math.random()<.25, ph:Math.random()*6.28}; }
+  function frame(t){
+    x.clearRect(0,0,W,H);
+    for(let i=0;i<P.length;i++){ const p=P[i]; p.y-=p.v; p.x+=Math.sin(t/1600+p.ph)*.25*dpr; if(p.y<-10) P[i]=spawn(false);
+      x.globalAlpha=p.a*(.6+.4*Math.sin(t/700+p.ph)); x.fillStyle=p.red?"#e0566b":"#e9ecf5";
+      x.beginPath(); x.arc(p.x,p.y,p.r,0,6.28); x.fill(); }
+    requestAnimationFrame(frame);
+  }
+  addEventListener("resize",size); size(); requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
